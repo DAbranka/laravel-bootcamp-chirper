@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 class ChirpController extends Controller
 {
+    /* ---------------------------------- INDEX --------------------------------- */
     /**
      * Display a listing of the resource.
      *
@@ -19,7 +20,9 @@ class ChirpController extends Controller
             'chirps' => Chirp::with('user')->latest()->get(),
         ]);
     }
+    /* -------------------------------------------------------------------------- */
 
+    /* ----------------------------- Function CREATE ---------------------------- */
     /**
      * Show the form for creating a new resource.
      *
@@ -29,7 +32,9 @@ class ChirpController extends Controller
     {
         //
     }
+    /* -------------------------------------------------------------------------- */
 
+    /* ----------------------------- Function STORE ----------------------------- */
     /**
      * Store a newly created resource in storage.
      *
@@ -47,7 +52,9 @@ class ChirpController extends Controller
 
         return redirect(route('chirps.index'));
     }
+    /* -------------------------------------------------------------------------- */
 
+    /* ------------------------------ Function SHOW ----------------------------- */
     /**
      * Display the specified resource.
      *
@@ -58,7 +65,9 @@ class ChirpController extends Controller
     {
         //
     }
+    /* -------------------------------------------------------------------------- */
 
+    /* ------------------------------ Function EDIT ----------------------------- */
     /**
      * Show the form for editing the specified resource.
      *
@@ -67,9 +76,17 @@ class ChirpController extends Controller
      */
     public function edit(Chirp $chirp)
     {
-        //
-    }
+        $this->authorize('update', $chirp);
 
+        return view('chirps.edit', [
+
+            'chirp' => $chirp,
+
+        ]);
+    }
+    /* -------------------------------------------------------------------------- */
+
+    /* ----------------------------- Function UPDATE ---------------------------- */
     /**
      * Update the specified resource in storage.
      *
@@ -79,9 +96,21 @@ class ChirpController extends Controller
      */
     public function update(Request $request, Chirp $chirp)
     {
-        //
-    }
+        $this->authorize('update', $chirp);
 
+        $validated = $request->validate([
+
+            'message' => 'required|string|max:255',
+
+        ]);
+
+        $chirp->update($validated);
+
+        return redirect(route('chirps.index'));
+    }
+    /* -------------------------------------------------------------------------- */
+
+    /* ----------------------------- Function REMOVE ---------------------------- */
     /**
      * Remove the specified resource from storage.
      *
@@ -93,3 +122,4 @@ class ChirpController extends Controller
         //
     }
 }
+    /* -------------------------------------------------------------------------- */
