@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Chirp extends Model
 {
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
     protected $fillable = [
         'message',
     ];
